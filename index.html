@@ -1,0 +1,694 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Management Website</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+header {
+    background: #12345a;
+    color: white;
+    padding: 22px;
+    text-align: center;
+}
+
+header h1 {
+    margin-bottom: 7px;
+}
+
+nav {
+    background: #1e4976;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+nav button {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 15px 18px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+nav button:hover,
+nav button.active {
+    background: #2563eb;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 15px;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+h2 {
+    margin-bottom: 18px;
+    color: #12345a;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #00000010;
+}
+
+.card h3 {
+    color: #64748b;
+    font-size: 15px;
+}
+
+.card p {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 12px;
+    color: #2563eb;
+}
+
+.panel {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px #00000010;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 85px;
+}
+
+label {
+    font-weight: bold;
+}
+
+.btn {
+    background: #2563eb;
+    color: white;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    margin: 5px 3px;
+}
+
+.btn:hover {
+    background: #1d4ed8;
+}
+
+.delete {
+    background: #dc2626;
+}
+
+.edit {
+    background: #0d9488;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    min-width: 450px;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+th {
+    background: #eaf1fb;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.update-item {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.update-item h3 {
+    color: #2563eb;
+    margin-bottom: 7px;
+}
+
+footer {
+    text-align: center;
+    background: #12345a;
+    color: white;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+@media(max-width:600px) {
+    nav button {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🏫 ABC SCHOOL</h1>
+    <p>Knowledge • Discipline • Success</p>
+    <p>Welcome to Our School Official Website</p>
+</header>
+
+<nav>
+    <button class="active" onclick="showSection('home',this)">Home</button>
+    <button onclick="showSection('updates',this)">Updates</button>
+    <button onclick="showSection('students',this)">Students</button>
+    <button onclick="showSection('staff',this)">Staff</button>
+    <button onclick="showSection('hm',this)">Headmaster</button>
+    <button onclick="showSection('groups',this)">Groups</button>
+    <button onclick="showSection('feedback',this)">Feedback</button>
+</nav>
+
+<div class="container">
+
+<!-- HOME -->
+<section id="home" class="section active">
+
+<h2>School Dashboard</h2>
+
+<div class="cards">
+    <div class="card">
+        <h3>Total Students</h3>
+        <p id="studentCount">0</p>
+    </div>
+
+    <div class="card">
+        <h3>Total Staff</h3>
+        <p id="staffCount">0</p>
+    </div>
+
+    <div class="card">
+        <h3>School Groups</h3>
+        <p id="groupCount">0</p>
+    </div>
+
+    <div class="card">
+        <h3>Feedback</h3>
+        <p id="feedbackCount">0</p>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>About Our School</h2>
+    <p>
+      Our school provides quality education, develops student
+      skills and encourages discipline, leadership and creativity.
+    </p>
+</div>
+
+<div class="panel">
+    <h2>Latest School News</h2>
+    <div id="homeUpdates"></div>
+</div>
+
+</section>
+
+<!-- UPDATES -->
+<section id="updates" class="section">
+
+<h2>School Updates & Announcements</h2>
+
+<div class="panel">
+    <h3>Publish New Update</h3>
+
+    <label>Update Title</label>
+    <input id="updateTitle" placeholder="Enter update title">
+
+    <label>Description</label>
+    <textarea id="updateDesc" placeholder="Enter announcement"></textarea>
+
+    <button class="btn" onclick="addUpdate()">Publish Update</button>
+</div>
+
+<div class="panel">
+    <h3>Published Updates</h3>
+    <div id="updateList"></div>
+</div>
+
+</section>
+
+<!-- STUDENTS -->
+<section id="students" class="section">
+
+<h2>Student Management</h2>
+
+<div class="panel">
+    <h3>Add Student</h3>
+
+    <label>Student Name</label>
+    <input id="studentName" placeholder="Student name">
+
+    <label>Class</label>
+    <input id="studentClass" placeholder="Class and section">
+
+    <label>Admission Number</label>
+    <input id="studentRoll" placeholder="Admission number">
+
+    <button class="btn" onclick="addStudent()">Add Student</button>
+</div>
+
+<div class="panel">
+    <h3>Student Records</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Class</th>
+            <th>Admission No.</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="studentList"></tbody>
+      </table>
+    </div>
+</div>
+
+</section>
+
+<!-- STAFF -->
+<section id="staff" class="section">
+
+<h2>Staff Management</h2>
+
+<div class="panel">
+    <h3>Add Staff Member</h3>
+
+    <label>Staff Name</label>
+    <input id="staffName" placeholder="Staff name">
+
+    <label>Department / Subject</label>
+    <input id="staffSubject" placeholder="Mathematics, English etc.">
+
+    <label>Position</label>
+    <input id="staffPosition" placeholder="Teacher / Office staff">
+
+    <button class="btn" onclick="addStaff()">Add Staff</button>
+</div>
+
+<div class="panel">
+    <h3>Staff Details</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Position</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="staffList"></tbody>
+      </table>
+    </div>
+</div>
+
+</section>
+
+<!-- HEADMASTER -->
+<section id="hm" class="section">
+
+<h2>Our Headmaster</h2>
+
+<div class="panel">
+    <h3>Update Headmaster Information</h3>
+
+    <label>Name</label>
+    <input id="hmName" placeholder="Headmaster name">
+
+    <label>Qualification</label>
+    <input id="hmQualification" placeholder="Qualification">
+
+    <label>Message</label>
+    <textarea id="hmMessage" placeholder="Headmaster message"></textarea>
+
+    <button class="btn" onclick="saveHM()">Save Information</button>
+</div>
+
+<div class="panel">
+    <h3>Headmaster Profile</h3>
+    <div id="hmProfile">No information added yet.</div>
+</div>
+
+</section>
+
+<!-- GROUPS -->
+<section id="groups" class="section">
+
+<h2>Our School Groups & Clubs</h2>
+
+<div class="panel">
+    <h3>Add School Group</h3>
+
+    <label>Group Name</label>
+    <input id="groupName" placeholder="NSS / Sports / Science Club">
+
+    <label>Group Description</label>
+    <textarea id="groupDesc" placeholder="About this group"></textarea>
+
+    <button class="btn" onclick="addGroup()">Add Group</button>
+</div>
+
+<div class="panel">
+    <h3>Available Groups</h3>
+    <div id="groupList"></div>
+</div>
+
+</section>
+
+<!-- FEEDBACK -->
+<section id="feedback" class="section">
+
+<h2>Student & Visitor Feedback</h2>
+
+<div class="panel">
+    <h3>Share Your Feedback</h3>
+
+    <label>Your Name</label>
+    <input id="feedbackName" placeholder="Enter your name">
+
+    <label>Feedback</label>
+    <textarea id="feedbackText" placeholder="Write your feedback"></textarea>
+
+    <button class="btn" onclick="addFeedback()">Submit Feedback</button>
+</div>
+
+<div class="panel">
+    <h3>Feedback Received</h3>
+    <div id="feedbackList"></div>
+</div>
+
+</section>
+
+</div>
+
+<footer>
+    <p>© 2026 ABC SCHOOL | All Rights Reserved</p>
+    <p>Education for a Better Future</p>
+</footer>
+
+<script>
+
+// Save data in browser
+const keys = [
+    "students", "staff", "updates",
+    "groups", "feedback", "headmaster"
+];
+
+let data = {};
+
+keys.forEach(key => {
+    data[key] = JSON.parse(localStorage.getItem(key) || "[]");
+});
+
+function save(key) {
+    localStorage.setItem(key, JSON.stringify(data[key]));
+}
+
+function showSection(id, button) {
+    document.querySelectorAll(".section").forEach(s => {
+        s.classList.remove("active");
+    });
+
+    document.getElementById(id).classList.add("active");
+
+    document.querySelectorAll("nav button").forEach(b => {
+        b.classList.remove("active");
+    });
+
+    button.classList.add("active");
+}
+
+// STUDENTS
+function addStudent() {
+    let name = studentName.value.trim();
+    let cls = studentClass.value.trim();
+    let roll = studentRoll.value.trim();
+
+    if (!name || !cls || !roll) {
+        alert("Please fill all student details");
+        return;
+    }
+
+    data.students.push({name, cls, roll});
+    save("students");
+
+    studentName.value = "";
+    studentClass.value = "";
+    studentRoll.value = "";
+
+    render();
+}
+
+// STAFF
+function addStaff() {
+    let name = staffName.value.trim();
+    let subject = staffSubject.value.trim();
+    let position = staffPosition.value.trim();
+
+    if (!name || !subject || !position) {
+        alert("Please fill all staff details");
+        return;
+    }
+
+    data.staff.push({name, subject, position});
+    save("staff");
+
+    staffName.value = "";
+    staffSubject.value = "";
+    staffPosition.value = "";
+
+    render();
+}
+
+// UPDATES
+function addUpdate() {
+    let title = updateTitle.value.trim();
+    let desc = updateDesc.value.trim();
+
+    if (!title || !desc) {
+        alert("Enter title and description");
+        return;
+    }
+
+    data.updates.unshift({
+        title,
+        desc,
+        date: new Date().toLocaleDateString()
+    });
+
+    save("updates");
+
+    updateTitle.value = "";
+    updateDesc.value = "";
+
+    render();
+}
+
+// HEADMASTER
+function saveHM() {
+    let name = hmName.value.trim();
+    let qualification = hmQualification.value.trim();
+    let message = hmMessage.value.trim();
+
+    if (!name) {
+        alert("Enter headmaster name");
+        return;
+    }
+
+    data.headmaster = [{name, qualification, message}];
+    save("headmaster");
+    render();
+
+    alert("Headmaster details saved!");
+}
+
+// GROUPS
+function addGroup() {
+    let name = groupName.value.trim();
+    let desc = groupDesc.value.trim();
+
+    if (!name || !desc) {
+        alert("Fill group details");
+        return;
+    }
+
+    data.groups.push({name, desc});
+    save("groups");
+
+    groupName.value = "";
+    groupDesc.value = "";
+
+    render();
+}
+
+// FEEDBACK
+function addFeedback() {
+    let name = feedbackName.value.trim();
+    let message = feedbackText.value.trim();
+
+    if (!name || !message) {
+        alert("Please enter your feedback");
+        return;
+    }
+
+    data.feedback.push({name, message});
+    save("feedback");
+
+    feedbackName.value = "";
+    feedbackText.value = "";
+
+    alert("Thank you for your feedback!");
+
+    render();
+}
+
+// DELETE RECORD
+function removeItem(key, index) {
+    if (confirm("Are you sure you want to delete this record?")) {
+        data[key].splice(index, 1);
+        save(key);
+        render();
+    }
+}
+
+// SAFE HTML DISPLAY
+function safe(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+// DISPLAY ALL DATA
+function render() {
+
+    studentCount.textContent = data.students.length;
+    staffCount.textContent = data.staff.length;
+    groupCount.textContent = data.groups.length;
+    feedbackCount.textContent = data.feedback.length;
+
+    studentList.innerHTML = data.students.map((s,i) => `
+      <tr>
+        <td>${safe(s.name)}</td>
+        <td>${safe(s.cls)}</td>
+        <td>${safe(s.roll)}</td>
+        <td><button class="btn delete" onclick="removeItem('students',${i})">Delete</button></td>
+      </tr>
+    `).join("");
+
+    staffList.innerHTML = data.staff.map((s,i) => `
+      <tr>
+        <td>${safe(s.name)}</td>
+        <td>${safe(s.subject)}</td>
+        <td>${safe(s.position)}</td>
+        <td><button class="btn delete" onclick="removeItem('staff',${i})">Delete</button></td>
+      </tr>
+    `).join("");
+
+    updateList.innerHTML = data.updates.map((u,i) => `
+      <div class="update-item">
+        <h3>${safe(u.title)}</h3>
+        <p>${safe(u.desc)}</p>
+        <small>${safe(u.date)}</small><br>
+        <button class="btn delete" onclick="removeItem('updates',${i})">Delete</button>
+      </div>
+    `).join("") || "No updates yet.";
+
+    homeUpdates.innerHTML = data.updates.slice(0,3).map(u => `
+      <div class="update-item">
+        <h3>${safe(u.title)}</h3>
+        <p>${safe(u.desc)}</p>
+      </div>
+    `).join("") || "No recent announcements.";
+
+    groupList.innerHTML = data.groups.map((g,i) => `
+      <div class="update-item">
+        <h3>${safe(g.name)}</h3>
+        <p>${safe(g.desc)}</p>
+        <button class="btn delete" onclick="removeItem('groups',${i})">Delete</button>
+      </div>
+    `).join("") || "No groups added yet.";
+
+    feedbackList.innerHTML = data.feedback.map((f,i) => `
+      <div class="update-item">
+        <h3>${safe(f.name)}</h3>
+        <p>${safe(f.message)}</p>
+        <button class="btn delete" onclick="removeItem('feedback',${i})">Delete</button>
+      </div>
+    `).join("") || "No feedback yet.";
+
+    let hm = data.headmaster[0];
+
+    hmProfile.innerHTML = hm ? `
+      <h3>${safe(hm.name)}</h3>
+      <p><b>Qualification:</b> ${safe(hm.qualification)}</p>
+      <p><b>Message:</b> ${safe(hm.message)}</p>
+    ` : "No information added yet.";
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>
